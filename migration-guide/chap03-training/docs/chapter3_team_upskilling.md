@@ -56,6 +56,96 @@ async def process_request():
 
 ---
 
+## Development Environment Setup
+
+### 1. Local Development Environment
+```bash
+# Setup script for team members
+#!/bin/bash
+# setup_fastapi_dev.sh
+
+echo "Setting up FastAPI development environment..."
+
+# Create virtual environment
+python -m venv fastapi_env
+source fastapi_env/bin/activate  # On Windows: fastapi_env\Scripts\activate
+
+# Install development dependencies
+pip install fastapi uvicorn[standard] aioboto3 pytest pytest-asyncio httpx
+
+# Install development tools
+pip install black isort mypy pre-commit
+
+# Setup pre-commit hooks
+pre-commit install
+
+echo "Environment ready! Start with: uvicorn main:app --reload"
+```
+
+### 2. VS Code Configuration
+```json
+// .vscode/settings.json
+{
+    "python.defaultInterpreterPath": "./fastapi_env/bin/python",
+    "python.linting.enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.formatting.provider": "black",
+    "python.sortImports.args": ["--profile", "black"],
+    "files.associations": {
+        "*.py": "python"
+    },
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "tests",
+        "-v"
+    ]
+}
+```
+
+### 3. Debugging Async Code
+```python
+# debug_helpers.py
+import asyncio
+import functools
+import time
+
+def async_timer(func):
+    """Decorator to time async functions"""
+    @functools.wraps(func)
+    async def wrapper(*args, **kwargs):
+        start = time.time()
+        result = await func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} took {end - start:.2f} seconds")
+        return result
+    return wrapper
+
+def debug_async_calls(func):
+    """Decorator to debug async function calls"""
+    @functools.wraps(func)
+    async def wrapper(*args, **kwargs):
+        print(f"Calling async function: {func.__name__}")
+        try:
+            result = await func(*args, **kwargs)
+            print(f"✓ {func.__name__} completed successfully")
+            return result
+        except Exception as e:
+            print(f"✗ {func.__name__} failed: {str(e)}")
+            raise
+    return wrapper
+
+# Usage
+@async_timer
+@debug_async_calls
+async def slow_operation():
+    await asyncio.sleep(2)
+    return "completed"
+```
+
+---
+
+
+
 ## Compressed Learning Path (2-Week Intensive)
 
 ### Week 1: Foundation Bootcamp
@@ -1098,93 +1188,6 @@ async def load_test_chat():
 
 ---
 
-## Development Environment Setup
-
-### 1. Local Development Environment
-```bash
-# Setup script for team members
-#!/bin/bash
-# setup_fastapi_dev.sh
-
-echo "Setting up FastAPI development environment..."
-
-# Create virtual environment
-python -m venv fastapi_env
-source fastapi_env/bin/activate  # On Windows: fastapi_env\Scripts\activate
-
-# Install development dependencies
-pip install fastapi uvicorn[standard] aioboto3 pytest pytest-asyncio httpx
-
-# Install development tools
-pip install black isort mypy pre-commit
-
-# Setup pre-commit hooks
-pre-commit install
-
-echo "Environment ready! Start with: uvicorn main:app --reload"
-```
-
-### 2. VS Code Configuration
-```json
-// .vscode/settings.json
-{
-    "python.defaultInterpreterPath": "./fastapi_env/bin/python",
-    "python.linting.enabled": true,
-    "python.linting.mypyEnabled": true,
-    "python.formatting.provider": "black",
-    "python.sortImports.args": ["--profile", "black"],
-    "files.associations": {
-        "*.py": "python"
-    },
-    "python.testing.pytestEnabled": true,
-    "python.testing.pytestArgs": [
-        "tests",
-        "-v"
-    ]
-}
-```
-
-### 3. Debugging Async Code
-```python
-# debug_helpers.py
-import asyncio
-import functools
-import time
-
-def async_timer(func):
-    """Decorator to time async functions"""
-    @functools.wraps(func)
-    async def wrapper(*args, **kwargs):
-        start = time.time()
-        result = await func(*args, **kwargs)
-        end = time.time()
-        print(f"{func.__name__} took {end - start:.2f} seconds")
-        return result
-    return wrapper
-
-def debug_async_calls(func):
-    """Decorator to debug async function calls"""
-    @functools.wraps(func)
-    async def wrapper(*args, **kwargs):
-        print(f"Calling async function: {func.__name__}")
-        try:
-            result = await func(*args, **kwargs)
-            print(f"✓ {func.__name__} completed successfully")
-            return result
-        except Exception as e:
-            print(f"✗ {func.__name__} failed: {str(e)}")
-            raise
-    return wrapper
-
-# Usage
-@async_timer
-@debug_async_calls
-async def slow_operation():
-    await asyncio.sleep(2)
-    return "completed"
-```
-
----
 
 ## Team Readiness Assessment
 
