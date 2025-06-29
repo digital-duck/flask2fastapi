@@ -52,20 +52,28 @@ Would you like me to help you analyze the MedAssistant codebase structure to pla
 
 # Sample Apps
 
-## Flask based
-
-- https://github.com/GabrieleLagani/MedAssistant
-
-- https://github.com/omkars20/Chat-With-PDFs-RAG-LLM-
-
-- https://github.com/bhushankorg/Medical-Assistant 
-
-- https://github.com/Mayank77maruti/Heal-Smart/tree/main
-
 ## FastAPI based
 
 - https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant
+    - very good example of multi-agent system with FastAPI, multi-modal chat, and RAG 
+    - forked to wgong  
+
+## Flask based
+
+- https://github.com/GabrieleLagani/MedAssistant
+    - Comprehensive Flask application with LLM, RAG, and database integration
+    - Perfect for migration to FastAPI with complex features
+    - forked to wgong  
+
+### not good
+
+- https://github.com/Mayank77maruti/Heal-Smart/tree/main
+    - only frontend, but has a good design
+
+- https://github.com/omkars20/Chat-With-PDFs-RAG-LLM-
+- https://github.com/bhushankorg/Medical-Assistant 
 
 
-## Gradio
+## Jupyter Notebook / Gradio
 - https://github.com/kmnis/DocScribe
+    - a POC from Univ of Chicago, with good potential
