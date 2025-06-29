@@ -231,6 +231,7 @@ async def list_items(db=Depends(get_db)):
 ```
 
 #### Day 3: AWS Async Integration (4 hours)
+
 **Focus: aioboto3 and AWS patterns**
 ```python
 # Exercise: Convert boto3 to aioboto3
@@ -337,7 +338,9 @@ async def handle_multiple_chats(messages: List[str], session_id: str):
         process_single_chat(msg, session_id) 
         for msg in messages
     ]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
+    results = await asyncio.gather(*tasks, 
+            return_exceptions=True   # prevents one failure from killing all concurrent operations
+        )   
     
     # Handle any exceptions
     processed_results = []
@@ -445,7 +448,7 @@ async def async_workflow():
         asyncio.to_thread(sync_api_call, f"https://jsonplaceholder.typicode.com/posts/{i}")
         for i in range(1, 4)
     ]
-    results = await asyncio.gather(*tasks)
+    results = await asyncio.gather(*tasks, return_exceptions=True)
     print(f"Concurrent results: {len(results)} API calls completed")
 
 # Run the async workflow
@@ -775,17 +778,17 @@ class AsyncRunner:
             return await asyncio.gather(*async_funcs)
         return asyncio.run(runner())
 
+# Quick test multiple functions
+async def test_func2():
+    await asyncio.sleep(0.1)
+    return "test result 2"
+
 # Usage for quick testing
 runner = AsyncRunner()
 
 # Quick test individual async functions
 result1 = runner.run(async_bedrock_call, "test message 1")
 print(f"Quick test 1: {result1}")
-
-# Quick test multiple functions
-async def test_func2():
-    await asyncio.sleep(0.1)
-    return "test result 2"
 
 results = runner.run_multiple(
     async_bedrock_call("test message A"),
